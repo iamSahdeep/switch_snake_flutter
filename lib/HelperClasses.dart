@@ -1,6 +1,11 @@
 import 'dart:collection';
 
-import 'Cell.dart';
+class Cell extends LinkedListEntry<Cell> {
+  final int row, col;
+  CellType cellType = CellType.EMPTY;
+
+  Cell(this.row, this.col);
+}
 
 class Snake {
   LinkedList<Cell> snakePartList = LinkedList();
@@ -31,20 +36,8 @@ class Snake {
     if (snakePartList.contains(nextCell)) return true;
     return false;
   }
-
-  LinkedList<Cell> getSnakePartList() {
-    return snakePartList;
-  }
-
-  void setSnakePartList(LinkedList<Cell> snakePartList) {
-    this.snakePartList = snakePartList;
-  }
-
-  Cell getHead() {
-    return head;
-  }
-
-  void setHead(Cell head) {
-    this.head = head;
-  }
 }
+
+enum CellType { EMPTY, FOOD, SNAKE_NODE }
+
+enum Direction { Up, Down, Right, Left }

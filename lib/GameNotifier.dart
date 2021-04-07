@@ -2,11 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:switch_snake/Snake.dart';
+import 'package:switch_snake/HelperClasses.dart';
 import 'dart:math' as Math;
-import 'Cell.dart';
-
-enum Direction { Up, Down, Right, Left }
 
 class GameNotifier extends ChangeNotifier {
   List<List<Cell>> board = [];
@@ -15,6 +12,7 @@ class GameNotifier extends ChangeNotifier {
   Timer _timer;
   bool gamesOver = false;
   int speed = 400;
+  //to handle multiple input.
   bool updateAvailable = false;
 
   GameNotifier() {
@@ -106,6 +104,7 @@ class GameNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// don't ask me about this here, XD its a mess.
   void handleKeyPress(RawKeyEvent event) {
     if(!updateAvailable)
     if (event.logicalKey == LogicalKeyboardKey.arrowUp &&
