@@ -1,8 +1,6 @@
 import 'dart:collection';
 
 import 'Cell.dart';
-import 'Cell.dart';
-import 'Cell.dart';
 
 class Snake {
   LinkedList<Cell> snakePartList = LinkedList();

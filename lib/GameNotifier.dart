@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:switch_snake/Snake.dart';
 import 'dart:math' as Math;
 import 'Cell.dart';
-import 'Cell.dart';
-import 'Cell.dart';
 
 enum Direction { Up, Down, Right, Left }
 
@@ -16,12 +14,16 @@ class GameNotifier extends ChangeNotifier {
   Direction direction = Direction.Down;
   Timer _timer;
   bool gamesOver = false;
+  int speed = 400;
+  bool updateAvailable = false;
 
   GameNotifier() {
     init();
   }
 
   init() {
+    gamesOver = false;
+    updateAvailable = false;
     board = List<List<Cell>>.generate(15, (row) {
       return List<Cell>.generate(15, (col) => Cell(row, col));
     });
@@ -34,14 +36,13 @@ class GameNotifier extends ChangeNotifier {
   }
 
   void initGameLoop() {
-    _timer = Timer.periodic(Duration(milliseconds:  500), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: speed), (timer) {
       update();
       notifyListeners();
     });
   }
 
-  void update()
-  {
+  void update() {
     if (!gamesOver) {
       if (direction != null) {
         Cell nextCell = getNextCell(snake.head);
@@ -50,7 +51,7 @@ class GameNotifier extends ChangeNotifier {
           _timer.cancel();
           gamesOver = true;
           notifyListeners();
-        } else{
+        } else {
           if (nextCell.cellType == CellType.FOOD) {
             snake.grow(nextCell);
             generateFood();
@@ -59,38 +60,34 @@ class GameNotifier extends ChangeNotifier {
         }
       }
     }
+    updateAvailable = false;
   }
 
-  Cell getNextCell(Cell currentPosition)
-  {
+  Cell getNextCell(Cell currentPosition) {
     int row = currentPosition.row;
     int col = currentPosition.col;
 
     if (direction == Direction.Right) {
       col--;
-    }
-    else if (direction == Direction.Left) {
+    } else if (direction == Direction.Left) {
       col++;
-    }
-    else if (direction == Direction.Up) {
+    } else if (direction == Direction.Up) {
       row--;
-    }
-    else if (direction == Direction.Down) {
+    } else if (direction == Direction.Down) {
       row++;
     }
 
-    if(col >= Snake.MAX){
+    if (col >= Snake.MAX) {
       col = 0;
-    } else if(col < 0){
+    } else if (col < 0) {
       col = Snake.MAX - 1;
     }
 
-    if(row >= Snake.MAX){
+    if (row >= Snake.MAX) {
       row = 0;
-    } else if(row < 0){
+    } else if (row < 0) {
       row = Snake.MAX - 1;
     }
-
 
     Cell nextCell = board[row][col];
 
@@ -100,25 +97,33 @@ class GameNotifier extends ChangeNotifier {
   void generateFood() {
     int row = 0;
     int col = 0;
-    while(true){
+    while (true) {
       row = (Math.Random().nextInt(board[0].length));
       col = (Math.Random().nextInt(board[0].length));
-      if(board[row][col].cellType !=CellType.SNAKE_NODE)
-        break;
+      if (board[row][col].cellType != CellType.SNAKE_NODE) break;
     }
     board[row][col].cellType = (CellType.FOOD);
     notifyListeners();
   }
 
   void handleKeyPress(RawKeyEvent event) {
-    if(event.logicalKey == LogicalKeyboardKey.arrowUp && direction != Direction.Left){
+    if(!updateAvailable)
+    if (event.logicalKey == LogicalKeyboardKey.arrowUp &&
+        direction != Direction.Left) {
       direction = Direction.Right;
-    } else if(event.logicalKey == LogicalKeyboardKey.arrowDown && direction != Direction.Right){
+      updateAvailable = true;
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowDown &&
+        direction != Direction.Right) {
       direction = Direction.Left;
-    } else if(event.logicalKey == LogicalKeyboardKey.arrowLeft && direction != Direction.Down){
+      updateAvailable = true;
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft &&
+        direction != Direction.Down) {
       direction = Direction.Up;
-    } else if(event.logicalKey == LogicalKeyboardKey.arrowRight && direction != Direction.Up){
+      updateAvailable = true;
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowRight &&
+        direction != Direction.Up) {
       direction = Direction.Down;
+      updateAvailable = true;
     }
     notifyListeners();
   }

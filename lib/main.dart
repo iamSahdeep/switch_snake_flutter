@@ -41,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _focusNode.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GameNotifier>(
@@ -50,30 +51,82 @@ class _MyHomePageState extends State<MyHomePage> {
       child:
           Consumer(builder: (BuildContext context, GameNotifier notifier, _) {
         final size = MediaQuery.of(context).size;
-        final double itemHeight = (size.height - kToolbarHeight - 24) / notifier.board[0].length;
+        final double itemHeight =
+            (size.height - kToolbarHeight - 24) / notifier.board[0].length;
         final double itemWidth = size.width / notifier.board[0].length;
         return RawKeyboardListener(
           focusNode: _focusNode,
           autofocus: true,
           onKey: notifier.handleKeyPress,
           child: Scaffold(
-            body: Container(
-              child: Center(
-                child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: notifier.board[0].length, childAspectRatio: (itemWidth/ itemHeight)),
-                    shrinkWrap: true,
-                    itemCount:
-                        notifier.board[0].length * notifier.board[0].length,
-                    itemBuilder: (context, index) {
-                      int x = (index % notifier.board[0].length).toInt();
-                      int y = index ~/ notifier.board[0].length;
-                      Cell cell = notifier.board[x][y];
-                      return CupertinoSwitch(
-                          value: cell.cellType != CellType.EMPTY,
-                          onChanged: (_) {});
-                    }),
-              ),
+            body: Stack(
+              children: [
+                Container(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Score : ${notifier.snake.snakePartList.length - 1}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                      ),
+                      Center(
+                        child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: notifier.board[0].length,
+                                    childAspectRatio: (itemWidth / itemHeight)),
+                            shrinkWrap: true,
+                            itemCount: notifier.board[0].length *
+                                notifier.board[0].length,
+                            itemBuilder: (context, index) {
+                              int x =
+                                  (index % notifier.board[0].length).toInt();
+                              int y = index ~/ notifier.board[0].length;
+                              Cell cell = notifier.board[x][y];
+                              return CupertinoSwitch(
+                                  value: cell.cellType != CellType.EMPTY,
+                                  onChanged: (_) {});
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+                notifier.gamesOver
+                    ? Center(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Score : ${notifier.snake.snakePartList.length - 1}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      notifier.init();
+                                    },
+                                    child: Text("Restart"),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox()
+              ],
             ),
           ),
         );
