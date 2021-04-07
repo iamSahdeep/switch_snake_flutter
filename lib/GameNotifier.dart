@@ -7,9 +7,9 @@ import 'dart:math' as Math;
 
 class GameNotifier extends ChangeNotifier {
   List<List<Cell>> board = [];
-  Snake snake;
-  Direction direction = Direction.Down;
-  Timer _timer;
+  late Snake snake;
+  Direction? direction = Direction.Down;
+  late Timer _timer;
   bool gamesOver = false;
   int speed = 400;
   //to handle multiple input.

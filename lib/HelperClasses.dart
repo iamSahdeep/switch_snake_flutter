@@ -9,7 +9,7 @@ class Cell extends LinkedListEntry<Cell> {
 
 class Snake {
   LinkedList<Cell> snakePartList = LinkedList();
-  Cell head;
+  late Cell head;
   static const int MAX = 15;
 
   Snake(Cell initPos) {
