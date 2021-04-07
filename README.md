@@ -1,16 +1,12 @@
-# switch_snake
+# Switch Snake Flutter
 
-A new Flutter application.
+Classic snake game but with Cupertino switches only. :)
 
-## Getting Started
+## Sample Gif 
 
-This project is a starting point for a Flutter application.
+<p align="center">
+<img src="https://raw.githubusercontent.com/iamSahdeep/switch_snake_flutter/master/live/gif_sample.gif" width="640" height="550">
+</p>
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Author & support
+This project is created by [Sahdeep Singh](https://github.com/iamSahdeep)
